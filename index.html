@@ -1,0 +1,167 @@
+\index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Irrigation Dashboard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="logo">
+        <img src="https://i.imgur.com/7esGRiH.png" alt="Smart Irrigation Logo">
+        <h2>Smart<span>Farm</span></h2>
+      </div>
+      <div class="menu">
+        <div class="menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+          </svg>
+          <span>Dashboard</span>
+        </div>
+      </div>
+      <div class="connection-status">
+        <div id="status-indicator" class="status-dot connecting"></div>
+        <span id="status-text">Connecting...</span>
+      </div>
+    </div>
+    
+    <div class="main-content">
+      <div class="header">
+        <h1>Smart Irrigation Dashboard</h1>
+        <div class="profile">
+          <span>User Account</span>
+          <div class="avatar">👨‍🌾</div>
+        </div>
+      </div>
+
+      <div class="farm-settings">
+        <div class="setting-group">
+          <label for="season">Season:</label>
+          <select id="season">
+            <option value="summer">Summer</option>
+            <option value="monsoon">Monsoon</option>
+            <option value="winter">Winter</option>
+            <option value="autumn">Autumn</option>
+          </select>
+        </div>
+        <div class="setting-group">
+          <label for="crop">Crop Type:</label>
+          <select id="crop">
+            <option value="wheat">Wheat</option>
+            <option value="corn">Corn</option>
+            <option value="rice">Rice</option>
+            <option value="sugarcane">Sugarcane</option>
+            <option value="cotton">Cotton</option>
+          </select>
+        </div>
+        <button class="apply-settings-btn" onclick="updateThresholds()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
+          </svg>
+          Apply Settings
+        </button>
+      </div>
+
+      <div class="current-thresholds">
+        <div class="threshold-item">
+          <span>Moisture Threshold:</span>
+          <span id="moisture-threshold">1400</span>
+        </div>
+        <div class="threshold-item">
+          <span>Temperature Threshold:</span>
+          <span id="temp-threshold">30.0°C</span>
+        </div>
+        <div class="threshold-item">
+          <span>Humidity Threshold:</span>
+          <span id="humidity-threshold">40.0%</span>
+        </div>
+      </div>
+
+      <div class="alerts" id="alerts-container"></div>
+
+      <div class="sensors-grid">
+        <div class="sensor-card">
+          <div class="sensor-icon">💧</div>
+          <h3>Soil Moisture</h3>
+          <div class="sensor-value" id="moisture">--</div>
+          <div class="gauge-container">
+            <div class="gauge-bar" id="moisture-gauge"></div>
+          </div>
+          <div class="status" id="moisture-status">Loading...</div>
+        </div>
+
+        <div class="sensor-card">
+          <div class="sensor-icon">🌡️</div>
+          <h3>Soil Temperature</h3>
+          <div class="sensor-value" id="temperature">--</div>
+          <div class="gauge-container">
+            <div class="gauge-bar" id="temperature-gauge"></div>
+          </div>
+          <div class="status" id="temperature-status">Loading...</div>
+        </div>
+
+        <div class="sensor-card">
+          <div class="sensor-icon">☁️</div>
+          <h3>Air Humidity</h3>
+          <div class="sensor-value" id="humidity">--</div>
+          <div class="gauge-container">
+            <div class="gauge-bar" id="humidity-gauge"></div>
+          </div>
+          <div class="status" id="humidity-status">Loading...</div>
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <h2>System Controls</h2>
+        <div class="controls-grid">
+          <div class="control-card">
+            <h3>Irrigation System</h3>
+            <p>Manually activate the water pump</p>
+            <button class="btn water-btn" onclick="sendCommand('water')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z" />
+              </svg>
+              Water Now
+            </button>
+          </div>
+          <div class="control-card">
+            <h3>Cooling System</h3>
+            <p>Manually activate the cooling system</p>
+            <button class="btn cool-btn" onclick="sendCommand('cool')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              Cool Now
+            </button>
+          </div>
+          <div class="control-card">
+            <h3>Humidifier</h3>
+            <p>Manually control the humidifier</p>
+            <button class="btn humidity-btn" id="humidifier-btn" onclick="toggleHumidifier()">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+              </svg>
+              Turn On
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <h2>Sensor History</h2>
+        <div class="chart-container">
+          <canvas id="sensor-history"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
