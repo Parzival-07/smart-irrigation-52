@@ -2,8 +2,6 @@
 
 A real-time IoT-based smart irrigation monitoring and control system with a modern web dashboard.  This project connects to ESP32 devices via MQTT to monitor soil conditions and automatically manage irrigation systems based on crop-specific requirements.
 
-![Smart Irrigation Dashboard](https://i.imgur.com/7esGRiH.png)
-
 ## ✨ Features
 
 ### 📊 Real-Time Monitoring
