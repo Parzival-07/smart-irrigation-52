@@ -1,39 +1,39 @@
-# 🌱 Smart Irrigation Dashboard
+# Smart Irrigation Dashboard
 
 A real-time IoT-based smart irrigation monitoring and control system with a modern web dashboard.  This project connects to ESP32 devices via MQTT to monitor soil conditions and automatically manage irrigation systems based on crop-specific requirements.
 
-## ✨ Features
+## Features
 
-### 📊 Real-Time Monitoring
+### Real-Time Monitoring
 - **Soil Moisture Monitoring** - Track soil moisture levels with analog sensor readings (0-4095)
 - **Soil Temperature Tracking** - Monitor soil temperature in real-time
 - **Air Humidity Measurement** - Keep track of ambient humidity levels
 - **Live Data Visualization** - Interactive charts showing historical sensor data
 
-### 🎛️ Smart Controls
+### Smart Controls
 - **Manual Irrigation Control** - Manually trigger the water pump when needed
 - **Cooling System** - Activate cooling systems during high temperature conditions
 - **Humidifier Control** - Toggle humidifier on/off with visual feedback
 
-### 🌾 Crop-Specific Settings
+### Crop-Specific Settings
 Pre-configured thresholds for different crops and seasons:
 - **Crops**: Wheat, Corn, Rice, Sugarcane, Cotton
 - **Seasons**: Summer, Monsoon, Winter, Autumn
 - Automatic threshold adjustment based on selected crop and season
 
-### 🔔 Intelligent Alerts
+### Intelligent Alerts
 - Low soil moisture warnings
 - High temperature alerts
 - Low humidity notifications
 - Critical condition indicators
 
-### 📈 Data Visualization
+### Data Visualization
 - Real-time sensor history charts
 - Separate graphs for moisture, temperature, and humidity
 - Visual gauge indicators for quick status checks
 - Color-coded status indicators (green for optimal, red for action needed)
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
 - **Charting**: Chart.js
@@ -45,14 +45,14 @@ Pre-configured thresholds for different crops and seasons:
   - Soil temperature sensor
   - DHT humidity sensor
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Modern web browser with WebSocket support
 - ESP32 device with appropriate sensors
 - HiveMQ Cloud account (or any MQTT broker)
 - Internet connection for MQTT communication
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the Repository
 ```bash
@@ -88,7 +88,7 @@ npx http-server
 
 Then navigate to `http://localhost:8000`
 
-## 📡 MQTT Topics
+## MQTT Topics
 
 The dashboard uses the following MQTT topics: 
 
@@ -120,7 +120,7 @@ The dashboard uses the following MQTT topics:
 }
 ```
 
-## 🌾 Crop Thresholds
+## Crop Thresholds
 
 The system includes pre-configured thresholds optimized for different crops and seasons: 
 
@@ -134,7 +134,7 @@ The system includes pre-configured thresholds optimized for different crops and 
 
 *Format:  Moisture threshold / Temperature threshold / Humidity threshold*
 
-## 🎨 Features Breakdown
+## Features Breakdown
 
 ### Connection Status Indicator
 - **Green**: Connected to MQTT broker
@@ -153,7 +153,7 @@ Each sensor card displays:
 - **Cool Now**: Activates cooling system
 - **Humidifier Toggle**: Turns humidifier on/off with persistent state
 
-## 📱 Responsive Design
+## Responsive Design
 
 The dashboard features a modern, responsive design with:
 - Clean, professional UI
